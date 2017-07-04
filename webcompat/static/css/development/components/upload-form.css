@@ -39,7 +39,9 @@
 }
 
 /* state */
-.wc-UploadForm-wrapper.is-hidden {
+.wc-UploadForm-wrapper.is-hidden,
+.wc-UploadForm-icon.is-hidden,
+.wc-UploadForm-label.is-hidden {
   display: none;
 }
 
@@ -92,6 +94,9 @@
   text-decoration: underline;
   transform: translateY(0);
   transition: transform .2s linear 0s;
+
+  /* workaround for mult dnd */
+  z-index: 10;
 }
 
 /* state */

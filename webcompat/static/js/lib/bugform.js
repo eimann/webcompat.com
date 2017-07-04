@@ -442,6 +442,8 @@ function BugForm() {
   this.showRemoveUpload = function(label) {
     var removeBanner = $(".wc-UploadForm-button");
     var uploadWrapper = $(".wc-UploadForm-wrapper");
+    var uploadIcon = $(".wc-UploadForm-icon");
+    var uploadLabel = $(".wc-UploadForm-label");
 
     // hide upload image errors (this will no-op if the user never saw one)
     $(".wc-Form-helpMessage--imageUpload").remove();
@@ -449,7 +451,9 @@ function BugForm() {
 
     removeBanner.removeClass("is-hidden");
     removeBanner.attr("tabIndex", "0");
-    uploadWrapper.addClass("is-hidden");
+    uploadIcon.addClass("is-hidden");
+    uploadLabel.addClass("is-hidden");
+    uploadLabel.hide();
     removeBanner.on(
       "click",
       _.bind(function() {
@@ -457,15 +461,18 @@ function BugForm() {
         label.css("background", "none");
         removeBanner.addClass("is-hidden");
         removeBanner.attr("tabIndex", "-1");
+        uploadIcon.removeClass("is-hidden");
+        uploadLabel.removeClass("is-hidden");
+        uploadLabel.show();
         uploadWrapper.removeClass("is-hidden");
         removeBanner.off("click");
 
         // remove the last embedded image URL
         // Note: this could fail in weird ways depending on how
         // the user has edited the descField.
-        this.stepsToReproduceField.val(function(idx, value) {
-          return value.replace(/\[!\[[^\]]+\]\([^\)]+\)\]\([^\)]+\)$/, "");
-        });
+        // this.stepsToReproduceField.val(function(idx, value) {
+        //   return value.replace(/\[!\[[^\]]+\]\([^\)]+\)\]\([^\)]+\)$/, "");
+        // });
 
         this.hasImage = false;
       }, this)
@@ -485,7 +492,7 @@ function BugForm() {
       // grab the data URI from background-image property, since it's already
       // in the DOM: 'url("data:image/....")'
       this.previewEl.get(0).style.backgroundImage.slice(5, -2),
-      function(response) {
+      _.bind(function(response) {
         this.addImageURL(
           response,
           _.bind(function() {
@@ -501,7 +508,7 @@ function BugForm() {
             formEl.submit();
           }, this)
         );
-      }
+      }, this)
     );
   }, this);
 
